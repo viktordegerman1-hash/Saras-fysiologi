@@ -1,0 +1,210 @@
+/* Kroppen i bevegelse – stilark for PDF-utskrift (A4).
+   Design: "leken og varm" – pastellfarger, runde former, huskelapper.
+   Hvert kapittel setter sine egne farger via --c (sterk) og --cl (lys). */
+
+:root {
+  --ink: #3B2F4A;          /* hovedtekst, mørk plomme */
+  --muted: #6E6280;        /* bildetekster, sekundærtekst */
+  --paper: #FFFFFF;
+  --warm: #FFF8F1;         /* varm bakgrunn for figurer og forside */
+  --line: #3B2F4A;         /* streker i illustrasjoner */
+  --post-it: #FFF3A8;
+  --tape: rgba(126, 87, 194, .32);
+  --mint: #E3F4F1;  --mint-ink: #2E7D73;
+  --lilac: #EFE8FA; --lilac-ink: #6A44B0;
+  --peach: #FFE6DF; --peach-ink: #B23A48;
+  --sky: #E1F0FB;   --sky-ink: #2B6FA3;
+
+  /* faste farger for figurer, brukt på tvers av kapitler */
+  --blood-red: #E5484D;  --blood-red-l: #FBD3D4;
+  --blood-blue: #4A78D0; --blood-blue-l: #D6E2F7;
+  --actin: #26A69A;      --myosin: #7E57C2;
+  --muscle: #FF8A80;     --muscle-l: #FFD3CC;
+  --tendon: #FFF1CF;
+  --o2: #E5484D; --co2: #4A78D0;
+
+  --display: "Baloo 2", "Nunito", system-ui, sans-serif;
+  --body: "Nunito", system-ui, sans-serif;
+
+  --c: #FF6F61; --cl: #FFE1DC; /* standard kapittelfarge */
+}
+
+@page {
+  size: A4;
+  margin: 17mm 17mm 19mm;
+  @bottom-center {
+    content: counter(page);
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 600;
+    font-size: 10pt;
+    color: #8A7F99;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+@page plain { @bottom-center { content: none; } }
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 10.6pt;
+  line-height: 1.55;
+  hyphens: auto;
+  orphans: 3; widows: 3;
+}
+
+h1, h2, h3, h4 { font-family: var(--display); line-height: 1.1; margin: 0; text-wrap: balance; break-after: avoid; }
+h2 { font-size: 20pt; font-weight: 800; margin-top: 8mm; margin-bottom: 2.5mm; color: var(--ink); }
+h2::before { content: ""; display: inline-block; width: .55em; height: .55em; border-radius: 50%; background: var(--c); margin-right: .35em; vertical-align: .08em; }
+h3 { font-size: 14pt; font-weight: 600; margin-top: 5mm; margin-bottom: 1.5mm; color: var(--c-ink, var(--ink)); }
+p { margin: 0 0 3mm; }
+strong { font-weight: 800; }
+em { font-style: italic; }
+.hl { background: linear-gradient(transparent 55%, var(--cl) 55%); padding: 0 .1em; font-weight: 700; }
+ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
+li { margin-bottom: 1mm; }
+li::marker { color: var(--c); font-weight: 800; }
+small, .small { font-size: 9pt; color: var(--muted); }
+
+/* ---------- Forside ---------- */
+.cover {
+  page: cover;
+  width: 210mm; height: 297mm;
+  position: relative; overflow: hidden;
+  background: var(--warm);
+  padding: 30mm 22mm;
+  display: flex; flex-direction: column;
+  break-after: page;
+}
+.cover .eyebrow { font-family: var(--display); font-weight: 600; font-size: 13pt; color: var(--peach-ink); letter-spacing: .04em; }
+.cover h1 { font-size: 58pt; font-weight: 800; line-height: .95; margin-top: 4mm; color: var(--ink); }
+.cover h1 em { font-style: normal; color: #FF6F61; }
+.cover .sub { font-size: 14pt; max-width: 120mm; margin-top: 6mm; color: var(--muted); }
+.cover .art { position: absolute; left: 0; right: 0; bottom: 0; }
+.cover .art svg { display: block; width: 100%; height: auto; }
+
+/* ---------- Enkle sider (innhold, slik bruker du boka) ---------- */
+.plain { page: plain; break-after: page; }
+.plain h1 { font-size: 30pt; font-weight: 800; margin-bottom: 6mm; }
+
+.toc { list-style: none; padding: 0; margin: 0; display: grid; gap: 3mm; }
+.toc li { display: grid; grid-template-columns: 13mm 1fr auto; align-items: center; gap: 4mm; margin: 0;
+  background: var(--cl); border-radius: 5mm; padding: 3mm 5mm 3mm 3mm; }
+.toc .n { width: 13mm; height: 13mm; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center;
+  font-family: var(--display); font-weight: 800; font-size: 15pt; }
+.toc b { font-family: var(--display); font-weight: 800; font-size: 14pt; display: block; line-height: 1.1; }
+.toc span { font-size: 9.5pt; color: var(--muted); }
+.toc .pg { font-family: var(--display); font-weight: 800; font-size: 14pt; color: var(--c); font-variant-numeric: tabular-nums; }
+
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+
+/* ---------- Kapittelstart ---------- */
+.kap { break-before: page; }
+.opener {
+  background: var(--cl);
+  border-radius: 9mm;
+  padding: 9mm 10mm 8mm;
+  position: relative; overflow: hidden;
+  margin-bottom: 6mm;
+}
+.opener .blob { position: absolute; border-radius: 50%; background: var(--c); opacity: .18; }
+.opener .num { font-family: var(--display); font-weight: 800; font-size: 12pt; color: #fff; background: var(--c);
+  display: inline-block; padding: .6mm 4.5mm; border-radius: 99px; }
+.opener h1 { font-size: 36pt; font-weight: 800; margin-top: 3mm; line-height: .98; position: relative; }
+.opener .ingress { font-size: 12pt; margin-top: 3mm; max-width: 125mm; position: relative; }
+.opener .learn { margin-top: 5mm; background: rgba(255,255,255,.75); border-radius: 5mm; padding: 4mm 5mm; position: relative; max-width: 130mm; }
+.opener .learn h4 { font-size: 12pt; margin-bottom: 1.5mm; color: var(--c); }
+.opener .learn ul { margin: 0; }
+.opener .icon { position: absolute; right: 8mm; top: 8mm; width: 46mm; height: 46mm; }
+
+/* ---------- Bokser ---------- */
+.box { border-radius: 5mm; padding: 4mm 5mm; margin: 4mm 0; break-inside: avoid; }
+.box > h4 { font-size: 12.5pt; font-weight: 800; margin-bottom: 1.5mm; }
+.box p:last-child, .box ul:last-child, .box dl:last-child { margin-bottom: 0; }
+
+.visste { background: var(--lilac); }
+.visste > h4 { color: var(--lilac-ink); }
+.tenk { background: var(--mint); }
+.tenk > h4 { color: var(--mint-ink); }
+.praksis { background: var(--sky); }
+.praksis > h4 { color: var(--sky-ink); }
+.myte { background: var(--peach); }
+.myte > h4 { color: var(--peach-ink); }
+
+.ord { background: #fff; border: 2px dashed var(--c); }
+.ord > h4 { color: var(--c); }
+.ord dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 1.2mm 4mm; }
+.ord dt { font-weight: 800; }
+.ord dd { margin: 0; }
+
+.formel { background: var(--warm); border: 2px solid var(--c); text-align: center; }
+.formel .eq { font-family: var(--display); font-weight: 800; font-size: 16pt; color: var(--ink); }
+.formel .eq span { color: var(--c); }
+
+.huskelapp {
+  background: var(--post-it);
+  border-radius: 1.5mm;
+  padding: 7mm 7mm 5mm;
+  margin: 9mm 3mm 4mm;
+  transform: rotate(-.8deg);
+  box-shadow: 0 2mm 4mm rgba(120, 90, 0, .16);
+  position: relative;
+  break-inside: avoid;
+}
+.huskelapp::before { content: ""; position: absolute; top: -3.5mm; left: 50%; width: 30mm; height: 7mm; margin-left: -15mm; background: var(--tape); transform: rotate(2deg); }
+.huskelapp h4 { font-size: 17pt; font-weight: 800; margin-bottom: 2mm; }
+.huskelapp ul { margin: 0; }
+.huskelapp li::marker { content: "✓  "; color: var(--c); }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; align-items: start; }
+.two > * { min-width: 0; }
+.two .box { margin: 0; }
+.wide-left { grid-template-columns: 3fr 2fr; }
+
+/* ---------- Figurer ---------- */
+figure.fig { margin: 4mm 0; background: var(--warm); border-radius: 6mm; padding: 4mm 5mm 3mm; break-inside: avoid; }
+figure.fig svg { display: block; width: 100%; height: auto; }
+figure.fig figcaption { font-size: 9pt; color: var(--muted); margin-top: 2mm; }
+figure.fig figcaption b { color: var(--c); font-family: var(--display); font-weight: 800; font-size: 10pt; }
+
+/* tekst i illustrasjoner */
+svg text { font-family: var(--body); fill: var(--ink); }
+svg .t { font-size: 13px; font-weight: 700; }
+svg .ts { font-size: 11px; font-weight: 400; fill: var(--muted); }
+svg .th { font-family: var(--display); font-size: 16px; font-weight: 800; }
+svg .w { fill: #fff; }
+
+/* ---------- Tabeller ---------- */
+table.tab { width: 100%; border-collapse: separate; border-spacing: 0; margin: 4mm 0; font-size: 9.8pt; break-inside: avoid; }
+table.tab th { background: var(--c); color: #fff; font-family: var(--display); font-weight: 600; font-size: 10.5pt; text-align: left; padding: 2mm 3mm; }
+table.tab th:first-child { border-top-left-radius: 3mm; }
+table.tab th:last-child { border-top-right-radius: 3mm; }
+table.tab td { padding: 2mm 3mm; vertical-align: top; border-bottom: 1px solid var(--cl); }
+table.tab tr:nth-child(even) td { background: color-mix(in srgb, var(--cl) 40%, white); }
+table.tab td:first-child { font-weight: 700; }
+table.tab .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- Steg (ekte rekkefølger) ---------- */
+ol.steg { list-style: none; padding: 0; counter-reset: s; display: grid; gap: 2.5mm; }
+ol.steg > li { counter-increment: s; display: grid; grid-template-columns: 8mm 1fr; gap: 3mm; margin: 0; align-items: start; }
+ol.steg > li::before { content: counter(s); width: 8mm; height: 8mm; border-radius: 50%; background: var(--c); color: #fff;
+  display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 11pt; }
+
+/* ---------- Kort-rutenett (helsegevinster) ---------- */
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0; }
+.card { background: var(--cl); border-radius: 5mm; padding: 4mm 5mm; break-inside: avoid; }
+.card h4 { font-size: 12.5pt; margin-bottom: 1mm; display: flex; align-items: center; gap: 2.5mm; }
+.card h4 svg { width: 9mm; height: 9mm; flex: none; }
+.card p { margin: 0; font-size: 9.8pt; }
+
+/* ---------- Ordliste ---------- */
+.ordliste { columns: 2; column-gap: 8mm; }
+.ordliste div { break-inside: avoid; margin-bottom: 2.5mm; font-size: 9.6pt; }
+.ordliste b { font-family: var(--display); font-weight: 800; font-size: 11pt; color: var(--c); }
+
+.pb { break-before: page; }
+.avoid { break-inside: avoid; }
+.note { font-size: 8.8pt; color: var(--muted); }
