@@ -1,0 +1,265 @@
+<section class="kap" style="--c:#7E57C2;--cl:#ECE4F8;--c-ink:#5E3BA0">
+  <div class="opener">
+    <div class="blob" style="width:70mm;height:70mm;right:-18mm;top:-22mm"></div>
+    <div class="blob" style="width:30mm;height:30mm;right:40mm;bottom:-12mm"></div>
+    <span class="num">KAPITTEL 4</span>
+    <h1>Sirkulasjons&shy;systemet</h1>
+    <p class="ingress">Hjertet er pumpa, men det trengs også et rørsystem og noe som kan fraktes i rørene. Blodårene dine er til sammen nesten 100&nbsp;000 kilometer lange, nok til å gå mer enn to ganger rundt jorda. I dette kapitlet følger vi blodet på reisen gjennom kroppen.</p>
+    <div class="learn">
+      <h4>I dette kapitlet lærer du</h4>
+      <ul>
+        <li>hva det store og det lille kretsløpet er</li>
+        <li>forskjellen på arterier, kapillærer og vener</li>
+        <li>hva blodet består av, og hvordan oksygen blir fraktet</li>
+        <li>hvordan blodet blir omfordelt når vi trener</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>To kretsløp i ett</h2>
+  <p>Sirkulasjonssystemet består av <strong>hjertet</strong>, <strong>blodårene</strong> og <strong>blodet</strong>. Jobben er å frakte oksygen, næring, hormoner og varme dit kroppen trenger det, og å frakte bort avfallsstoffer som karbondioksid.</p>
+  <p>Som du så i kapittel 3, er hjertet to pumper. Derfor går blodet i to «runder», eller <strong>kretsløp</strong>, som henger sammen i et åttetall:</p>
+  <ul>
+    <li><strong>Det lille kretsløpet</strong> (lungekretsløpet) går fra høyre side av hjertet, gjennom lungene og tilbake til venstre side. Her henter blodet oksygen og kvitter seg med karbondioksid.</li>
+    <li><strong>Det store kretsløpet</strong> (kroppskretsløpet) går fra venstre side av hjertet, ut til alle organer og muskler og tilbake til høyre side. Her leverer blodet oksygen og næring og tar med seg avfallsstoffer.</li>
+  </ul>
+
+  <figure class="fig">
+    <svg viewBox="0 0 660 420" role="img" aria-label="Det store og det lille kretsløpet">
+      <defs>
+        <linearGradient id="lungGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#C5D6F5"/><stop offset="1" stop-color="#F8C4C6"/></linearGradient>
+        <linearGradient id="bodyGrad" x1="1" x2="0" y1="0" y2="0"><stop offset="0" stop-color="#F8C4C6"/><stop offset="1" stop-color="#C5D6F5"/></linearGradient>
+      </defs>
+      <!-- rør -->
+      <g fill="none" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M250,192 L180,192 L180,58 L232,58" stroke="var(--blood-blue)"/>
+        <path d="M428,58 L480,58 L480,192 L410,192" stroke="var(--blood-red)"/>
+        <path d="M410,232 L560,232 L560,365 L462,365" stroke="var(--blood-red)"/>
+        <path d="M198,365 L100,365 L100,232 L250,232" stroke="var(--blood-blue)"/>
+      </g>
+      <!-- piler -->
+      <g>
+        <path d="M168,128 l12,-18 l12,18 Z" fill="var(--blood-blue)"/>
+        <path d="M468,118 l12,18 l12,-18 Z" fill="var(--blood-red)"/>
+        <path d="M548,290 l12,18 l12,-18 Z" fill="var(--blood-red)"/>
+        <path d="M88,308 l12,-18 l12,18 Z" fill="var(--blood-blue)"/>
+      </g>
+      <!-- lunger -->
+      <rect x="230" y="22" width="200" height="72" rx="24" fill="url(#lungGrad)" stroke="var(--line)" stroke-width="1.5"/>
+      <path d="M250,58 q15,-18 30,0 t30,0 t30,0 t30,0 t30,0 t30,0" stroke="var(--line)" stroke-width="1.2" fill="none" opacity=".35"/>
+      <text class="th" x="330" y="46" text-anchor="middle">Lungene</text>
+      <text class="ts" x="330" y="80" text-anchor="middle" style="fill:var(--ink)">henter O₂ – leverer CO₂</text>
+      <!-- hjertet -->
+      <rect x="250" y="168" width="78" height="86" rx="18" fill="var(--blood-blue-l)" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="332" y="168" width="78" height="86" rx="18" fill="var(--blood-red-l)" stroke="var(--line)" stroke-width="1.5"/>
+      <text class="t" x="289" y="207" text-anchor="middle">Høyre</text><text class="t" x="289" y="222" text-anchor="middle">side</text>
+      <text class="t" x="371" y="207" text-anchor="middle">Venstre</text><text class="t" x="371" y="222" text-anchor="middle">side</text>
+      <text class="th" x="330" y="155" text-anchor="middle">Hjertet</text>
+      <!-- kroppen -->
+      <rect x="196" y="328" width="268" height="74" rx="24" fill="url(#bodyGrad)" stroke="var(--line)" stroke-width="1.5"/>
+      <path d="M216,365 q16,-18 32,0 t32,0 t32,0 t32,0 t32,0 t32,0 t32,0" stroke="var(--line)" stroke-width="1.2" fill="none" opacity=".35"/>
+      <text class="th" x="330" y="352" text-anchor="middle">Kroppen</text>
+      <text class="ts" x="330" y="388" text-anchor="middle" style="fill:var(--ink)">muskler og organer: leverer O₂ – henter CO₂</text>
+      <!-- etiketter for kretsløp -->
+      <text class="t" x="10" y="44" style="fill:var(--c)">Det lille</text>
+      <text class="t" x="10" y="59" style="fill:var(--c)">kretsløpet</text>
+      <text class="t" x="574" y="400" style="fill:var(--c)">Det store</text>
+      <text class="t" x="574" y="415" style="fill:var(--c)">kretsløpet</text>
+    </svg>
+    <figcaption><b>Figur 4.1</b> Blodet går i et åttetall. Blått er oksygenfattig blod, og rødt er oksygenrikt blod. Fargeskiftet skjer i de tynne kapillærene i lungene og ute i kroppen, der oksygen og karbondioksid byttes.</figcaption>
+  </figure>
+
+  <div class="box myte">
+    <h4>🔍 Myte eller fakta? «Blodet i venene er blått»</h4>
+    <p><strong>Myte.</strong> Blodet er alltid rødt. Oksygenrikt blod er klart rødt, og oksygenfattig blod er mørkere rødt. Venene ser blå ut gjennom huden fordi huden slipper gjennom og sprer lyset på en spesiell måte. I bøker som denne bruker vi blått bare for å skille de to typene blod fra hverandre.</p>
+  </div>
+
+  <h2>Blodårene: tre typer rør</h2>
+  <p>Blodårene deles inn i tre hovedtyper. De er bygget forskjellig, fordi de har forskjellige jobber.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 660 200" role="img" aria-label="Tverrsnitt av arterie, vene og kapillær">
+      <!-- arterie -->
+      <circle cx="110" cy="80" r="62" fill="#F6D2D2" stroke="var(--line)" stroke-width="1.5"/>
+      <circle cx="110" cy="80" r="52" fill="#E89A9A" stroke="var(--line)" stroke-width="1"/>
+      <circle cx="110" cy="80" r="24" fill="var(--blood-red-l)" stroke="var(--line)" stroke-width="1.5"/>
+      <text class="th" x="110" y="170" text-anchor="middle" style="fill:var(--blood-red)">Arterie</text>
+      <text class="ts" x="110" y="188" text-anchor="middle">tykk, elastisk muskelvegg</text>
+      <!-- vene -->
+      <ellipse cx="330" cy="80" rx="74" ry="52" fill="#DCE5F5" stroke="var(--line)" stroke-width="1.5"/>
+      <ellipse cx="330" cy="80" rx="68" ry="46" fill="#A9BEE6" stroke="var(--line)" stroke-width="1"/>
+      <ellipse cx="330" cy="80" rx="60" ry="38" fill="var(--blood-blue-l)" stroke="var(--line)" stroke-width="1.5"/>
+      <text class="th" x="330" y="170" text-anchor="middle" style="fill:var(--blood-blue)">Vene</text>
+      <text class="ts" x="330" y="188" text-anchor="middle">tynn vegg, stort hulrom</text>
+      <!-- kapillær -->
+      <circle cx="540" cy="80" r="20" fill="#F0E6F6" stroke="var(--line)" stroke-width="1.5"/>
+      <circle cx="540" cy="80" r="15" fill="#FFF" stroke="var(--line)" stroke-width="1"/>
+      <ellipse cx="540" cy="80" rx="10" ry="8" fill="var(--blood-red)"/>
+      <ellipse cx="540" cy="80" rx="4" ry="3" fill="#F58C90"/>
+      <path d="M565,62 L600,40" stroke="var(--muted)" stroke-width="1"/>
+      <text class="ts" x="602" y="38">rød blodcelle</text>
+      <text class="th" x="540" y="170" text-anchor="middle" style="fill:var(--c)">Kapillær</text>
+      <text class="ts" x="540" y="188" text-anchor="middle">vegg av ett cellelag</text>
+    </svg>
+    <figcaption><b>Figur 4.2</b> Blodårene sett på tvers. Kapillæren er egentlig mye mindre enn de andre. Den er så smal at de røde blodcellene må gå på rekke og rad.</figcaption>
+  </figure>
+
+  <table class="tab">
+    <thead><tr><th></th><th>Arterier (pulsårer)</th><th>Kapillærer (hårrørsårer)</th><th>Vener (blodårer)</th></tr></thead>
+    <tbody>
+      <tr><td>Retning</td><td>Fra hjertet</td><td>Mellom arterier og vener</td><td>Til hjertet</td></tr>
+      <tr><td>Vegg</td><td>Tykk, med muskler og elastiske fibre</td><td>Ekstremt tynn, bare ett cellelag</td><td>Tynn, med klaffer inni</td></tr>
+      <tr><td>Trykk</td><td>Høyt</td><td>Lavt</td><td>Svært lavt</td></tr>
+      <tr><td>Jobb</td><td>Frakte blodet raskt ut og fordele det</td><td>Bytte stoffer med cellene</td><td>Samle blodet og føre det tilbake</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Arteriene</h3>
+  <p>Arteriene tar imot blodet som hjertet pumper ut med høyt trykk. Veggene er tykke og elastiske, så de tøyer seg litt ved hvert hjerteslag og trekker seg sammen igjen. Det er denne bølgen du kjenner når du tar pulsen. Arteriene deler seg i stadig mindre grener. De minste grenene har en ring av glatt muskulatur som kan stramme seg eller slappe av, slik at kroppen kan regulere hvor mye blod hvert område får.</p>
+
+  <h3>Kapillærene</h3>
+  <p>Kapillærene er de tynneste blodårene, tynnere enn et hårstrå. Det er her selve <span class="hl">byttehandelen skjer</span>: oksygen og næring slipper ut gjennom den tynne veggen og inn til cellene, mens karbondioksid og avfallsstoffer går motsatt vei. Kapillærene danner et tett nett rundt hver eneste muskelfiber. Jo flere kapillærer en muskel har, desto lettere får den oksygen. Det er en av de viktigste tilpasningene til kondisjonstrening (kapittel 7).</p>
+
+  <h3>Venene og muskelpumpen</h3>
+  <p>Når blodet har passert kapillærene, er trykket nesten borte. Hvordan kommer blodet fra føttene og helt opp til hjertet igjen? Venene har to smarte løsninger:</p>
+  <div class="two wide-left">
+    <div>
+      <ul>
+        <li><strong>Veneklaffer:</strong> Inni venene sitter små klaffer, som bare slipper blodet videre mot hjertet. De hindrer at blodet renner tilbake og ned i beina.</li>
+        <li><strong>Muskelpumpen:</strong> Mange vener ligger mellom musklene. Hver gang en muskel trekker seg sammen, klemmes venen, og blodet presses oppover forbi klaffene. Når du går, hjelper altså leggmusklene hjertet!</li>
+      </ul>
+      <p>Det er derfor man kan bli svimmel hvis man står helt stille lenge, for eksempel i et bryllup eller når soldater står i giv akt: blodet samler seg i beina når muskelpumpen ikke jobber. Å vippe på tærne hjelper.</p>
+    </div>
+    <figure class="fig" style="margin:0">
+      <svg viewBox="0 0 260 260" role="img" aria-label="Muskelpumpen presser blodet opp gjennom venen">
+        <!-- muskler -->
+        <ellipse cx="62" cy="130" rx="44" ry="80" fill="var(--muscle)" stroke="var(--line)" stroke-width="1.5"/>
+        <ellipse cx="198" cy="130" rx="44" ry="80" fill="var(--muscle)" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- vene (klemt i midten) -->
+        <path d="M110,10 L110,90 Q118,130 110,170 L110,250 L150,250 L150,170 Q142,130 150,90 L150,10 Z" fill="var(--blood-blue-l)" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- klaffer -->
+        <g stroke="var(--blood-blue)" stroke-width="3" stroke-linecap="round" fill="none">
+          <path d="M111,62 L128,44 M149,62 L132,44"/>
+          <path d="M111,212 L128,194 M149,212 L132,194"/>
+        </g>
+        <!-- piler -->
+        <path d="M130,150 L130,105 M120,115 L130,102 L140,115" stroke="var(--blood-blue)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M100,130 L117,130 M160,130 L143,130" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round"/>
+        <text class="ts" x="130" y="8" text-anchor="middle" style="fill:var(--ink)">til hjertet ↑</text>
+        <text class="t" x="62" y="134" text-anchor="middle">muskel</text>
+        <text class="t" x="198" y="134" text-anchor="middle">muskel</text>
+      </svg>
+      <figcaption><b>Figur 4.3</b> Musklene klemmer venen, og klaffene sørger for at blodet bare går oppover.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Hva er blodet laget av?</h2>
+  <p>En voksen person har omtrent <strong>5 liter blod</strong> (litt mindre hos kvinner og litt mer hos menn). Hvis man lar et blodprøverør stå i en sentrifuge, skiller blodet seg i lag:</p>
+
+  <div class="two" style="grid-template-columns:1fr 2.2fr;align-items:center">
+    <figure class="fig" style="margin:0">
+      <svg viewBox="40 0 230 300" role="img" aria-label="Blodprøverør med plasma og blodceller">
+        <path d="M70,20 L130,20 L130,250 Q130,285 100,285 Q70,285 70,250 Z" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+        <path d="M72,30 L128,30 L128,148 L72,148 Z" fill="#FBE7A1"/>
+        <rect x="72" y="148" width="56" height="5" fill="#F5F2F8"/>
+        <path d="M72,153 L128,153 L128,250 Q128,283 100,283 Q72,283 72,250 Z" fill="var(--blood-red)"/>
+        <path d="M70,20 L130,20 L130,250 Q130,285 100,285 Q70,285 70,250 Z" fill="none" stroke="var(--line)" stroke-width="2"/>
+        <g style="font-size:12px;fill:var(--ink)">
+          <text x="140" y="86" style="font-weight:800">Plasma</text><text x="140" y="101">ca. 55 %</text>
+          <text x="140" y="148" style="font-weight:800">Hvite celler</text><text x="140" y="163">og plater, &lt;1 %</text>
+          <text x="140" y="216" style="font-weight:800">Røde celler</text><text x="140" y="231">ca. 45 %</text>
+        </g>
+      </svg>
+      <figcaption><b>Figur 4.4</b> Blod i et prøverør.</figcaption>
+    </figure>
+    <div>
+      <ul>
+        <li><strong>Plasma</strong> (ca. 55 %) er en gulaktig væske som for det meste består av vann. I plasmaet flyter næringsstoffer, salter, hormoner, proteiner og karbondioksid.</li>
+        <li><strong>Røde blodceller</strong> (ca. 45 %) frakter oksygen. Det finnes rundt 25&nbsp;000 milliarder av dem! De er fulle av et protein som heter <em>hemoglobin</em>, og det er det som gjør blodet rødt.</li>
+        <li><strong>Hvite blodceller</strong> er kroppens forsvar mot bakterier og virus.</li>
+        <li><strong>Blodplater</strong> er små cellebiter som stopper blødninger ved å klumpe seg sammen der en blodåre er skadet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Hvordan fraktes oksygen?</h3>
+  <p>Oksygen løser seg dårlig i vann. Derfor trengs <strong>hemoglobin</strong>. Hvert hemoglobinmolekyl kan binde fire oksygenmolekyler. I lungene, der det er mye oksygen, griper hemoglobinet tak i oksygenet. Ute i musklene, der det er lite oksygen, slipper det taket igjen. Jo hardere en muskel jobber, desto varmere og surere blir det rundt den, og desto lettere slipper hemoglobinet oksygenet. <span class="hl">Musklene som trenger mest, får altså mest</span>. Smart!</p>
+  <p>Andelen av blodet som består av røde blodceller, kalles <strong>hematokrit</strong>. Hos legen måler man ofte hvor mye hemoglobin blodet inneholder. Det kalles i dagligtale «blodprosenten». Lav hemoglobin kalles <em>blodmangel</em> eller <em>anemi</em> og gjør at man blir fortere sliten, fordi blodet frakter mindre oksygen.</p>
+
+  <div class="box visste">
+    <h4>💡 Visste du?</h4>
+    <p>En rød blodcelle lever i omtrent 120 dager. Benmargen må derfor lage rundt to millioner nye røde blodceller <em>hvert sekund</em>. Røde blodceller har ingen cellekjerne. Det gir mer plass til hemoglobin.</p>
+  </div>
+
+  <h2>Blodet flytter dit det trengs</h2>
+  <p>Kroppen har ikke nok blod til å fylle alle blodårene samtidig. Derfor styrer den blodet dit behovet er størst, ved å stramme blodårene noen steder og åpne dem andre steder. I hvile får mage, tarm, lever og nyrer mye blod. Når du trener, åpner blodårene i musklene seg, mens blodårene til fordøyelsen strammes. Samtidig pumper hjertet mye mer blod totalt.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 660 230" role="img" aria-label="Fordeling av blodet i hvile og under hard trening">
+      <text class="t" x="0" y="40">Hvile</text>
+      <text class="ts" x="0" y="56">ca. 5 l/min</text>
+      <g transform="translate(110,22)">
+        <rect x="0" y="0" width="100" height="40" fill="#FF8A80"/>
+        <rect x="100" y="0" width="125" height="40" fill="#F2A93B"/>
+        <rect x="225" y="0" width="100" height="40" fill="#2BA39A"/>
+        <rect x="325" y="0" width="75" height="40" fill="#7E57C2"/>
+        <rect x="400" y="0" width="20" height="40" fill="#E5484D"/>
+        <rect x="420" y="0" width="30" height="40" fill="#F6C9A8"/>
+        <rect x="450" y="0" width="50" height="40" fill="#D8D2E0"/>
+        <g class="w" style="font-size:12px;font-weight:800"><text x="50" y="25" text-anchor="middle" class="w">20 %</text><text x="162" y="25" text-anchor="middle" class="w">25 %</text><text x="275" y="25" text-anchor="middle" class="w">20 %</text><text x="362" y="25" text-anchor="middle" class="w">15 %</text></g>
+      </g>
+      <text class="t" x="0" y="120">Hard trening</text>
+      <text class="ts" x="0" y="136">ca. 25 l/min</text>
+      <g transform="translate(110,102)">
+        <rect x="0" y="0" width="420" height="40" fill="#FF8A80"/>
+        <rect x="420" y="0" width="15" height="40" fill="#F2A93B"/>
+        <rect x="435" y="0" width="10" height="40" fill="#2BA39A"/>
+        <rect x="445" y="0" width="20" height="40" fill="#7E57C2"/>
+        <rect x="465" y="0" width="20" height="40" fill="#E5484D"/>
+        <rect x="485" y="0" width="10" height="40" fill="#F6C9A8"/>
+        <rect x="495" y="0" width="5" height="40" fill="#D8D2E0"/>
+        <text x="210" y="25" text-anchor="middle" class="w" style="font-size:12px;font-weight:800">Muskler ca. 85 %</text>
+      </g>
+      <!-- forklaring -->
+      <g transform="translate(110,175)" class="ts" style="fill:var(--ink)">
+        <rect x="0" y="0" width="12" height="12" rx="3" fill="#FF8A80"/><text x="17" y="10">Muskler</text>
+        <rect x="80" y="0" width="12" height="12" rx="3" fill="#F2A93B"/><text x="97" y="10">Mage, tarm og lever</text>
+        <rect x="220" y="0" width="12" height="12" rx="3" fill="#2BA39A"/><text x="237" y="10">Nyrer</text>
+        <rect x="290" y="0" width="12" height="12" rx="3" fill="#7E57C2"/><text x="307" y="10">Hjerne</text>
+        <rect x="365" y="0" width="12" height="12" rx="3" fill="#E5484D"/><text x="382" y="10">Hjertet</text>
+        <rect x="0" y="22" width="12" height="12" rx="3" fill="#F6C9A8"/><text x="17" y="32">Hud</text>
+        <rect x="80" y="22" width="12" height="12" rx="3" fill="#D8D2E0"/><text x="97" y="32">Annet</text>
+      </g>
+    </svg>
+    <figcaption><b>Figur 4.5</b> Omtrentlig fordeling av blodet. Under hard trening går det aller meste til musklene. Hjernen får en mindre <em>andel</em>, men omtrent like mye blod som før, fordi hjertet pumper så mye mer totalt.</figcaption>
+  </figure>
+
+  <div class="box tenk">
+    <h4>💭 Tenk over</h4>
+    <p>Hvorfor er det lurt å vente litt med en hard treningsøkt etter et stort måltid? Hvis musklene og fordøyelsen «krangler» om blodet, vinner musklene. Da får magen mindre blod, og mange får vondt eller kvalm.</p>
+  </div>
+
+  <div class="box ord">
+    <h4>Nye ord</h4>
+    <dl>
+      <dt>Arterie</dt><dd>Blodåre som fører blod fra hjertet.</dd>
+      <dt>Vene</dt><dd>Blodåre som fører blod tilbake til hjertet.</dd>
+      <dt>Kapillær</dt><dd>Bitteliten blodåre der stoffer byttes med cellene.</dd>
+      <dt>Plasma</dt><dd>Den flytende delen av blodet.</dd>
+      <dt>Hemoglobin</dt><dd>Protein i de røde blodcellene som binder oksygen.</dd>
+      <dt>Muskelpumpen</dt><dd>Musklene klemmer venene og presser blodet tilbake mot hjertet.</dd>
+    </dl>
+  </div>
+
+  <div class="huskelapp">
+    <h4>Huskelapp ✏️</h4>
+    <ul>
+      <li>Blodet går i to kretsløp: det lille (hjertet → lungene → hjertet) og det store (hjertet → kroppen → hjertet).</li>
+      <li>Arterier fører blod fra hjertet, vener fører blod til hjertet, og i kapillærene byttes stoffer.</li>
+      <li>Veneklaffer og muskelpumpen hjelper blodet tilbake til hjertet.</li>
+      <li>Blodet består av plasma, røde og hvite blodceller og blodplater. Vi har ca. 5 liter.</li>
+      <li>Hemoglobin i de røde blodcellene frakter oksygen.</li>
+      <li>Under trening sendes opptil 85 % av blodet til musklene.</li>
+    </ul>
+  </div>
+</section>
