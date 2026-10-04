@@ -61,6 +61,7 @@ function findPages() {
   pages.forEach((p, i) => {
     const m = p.match(/KAPITTEL\s+(\d+)/);
     if (m && !(m[1] in found)) found[m[1]] = i + 1;
+    if (/ORDLISTE/.test(p) && !("10" in found)) found["10"] = i + 1;
   });
   return found;
 }
