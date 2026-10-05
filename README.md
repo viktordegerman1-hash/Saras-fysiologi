@@ -20,6 +20,7 @@ node build.mjs
 
 `stasjonsark/Stasjonsark.pdf` – åtte A4-ark klare til utskrift: ett informasjonsark per stasjon (markløft, benkpress, nedtrekk, beinpress, skulderpress, utfall, roing med manual) og ett ark med refleksjonsspørsmål til slutten av timen.
 
+- `stasjonsark/Stasjonsark.docx` – redigerbar Word-versjon (tekst kan endres, illustrasjonene er bilder)
 - `stasjonsark/stasjonsark.html` – kilden (innhold, illustrasjoner og design)
 - `stasjonsark/web/index.html` – frittstående nettversjon med innebygde typesnitt
-- Bygg på nytt med `node stasjonsark/build.mjs`
+- Bygg på nytt med `node stasjonsark/build.mjs` (PDF og nettside) og `node stasjonsark/build-docx.mjs` (Word)
