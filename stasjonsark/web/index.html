@@ -516,19 +516,19 @@ const EX = [
 },
 {
   id: "beinpress", name: "Beinpress", color: "#2E9E62", soft: "#E1F4E8", ink: "#1C6E42",
-  sub: "Press platen bort med beina. En trygg måte å trene beina tungt på.",
+  sub: "Press platen fremover med beina. En trygg måte å trene beina tungt på.",
   reps: "8–10",
   poses: [
-    { label: "Bøyde knær", draw: (d) => d.floor(188) + d.ln([110, 168], [192, 90], 6, d.eq2) + d.ln([60, 160], [60, 188], 6, d.eq2) + d.ln([92, 168], [104, 188], 6, d.eq2) + d.ln([22, 131], [90, 172], 9, d.eq2) + d.ln([130, 103], [150, 128], 4, d.eq) + d.ln([119, 91], [141, 115], 7, d.eq) + d.torso([80, 150], [36, 122], d.body) + d.head([19, 111], d.body) + d.circ([82, 150], 11, d.hi) + d.leg([80, 150], [79, 105], [124, 109], [117, 100], d.hi) + d.arm([36, 122], [52, 142], [70, 152], d.body) + d.arrow([150, 172], [184, 138], d.hi) + d.tag(8, 56, "Ryggen inntil setet") },
-    { label: "Press ut", draw: (d) => d.floor(188) + d.ln([110, 168], [192, 90], 6, d.eq2) + d.ln([60, 160], [60, 188], 6, d.eq2) + d.ln([92, 168], [104, 188], 6, d.eq2) + d.ln([22, 131], [90, 172], 9, d.eq2) + d.ln([150, 84], [170, 108], 4, d.eq) + d.ln([139, 72], [161, 96], 7, d.eq) + d.torso([80, 150], [36, 122], d.body) + d.head([19, 111], d.body) + d.circ([82, 150], 11, d.hi) + d.leg([80, 150], [106, 114], [144, 90], [137, 82], d.hi) + d.arm([36, 122], [52, 142], [70, 152], d.body) + d.tag(8, 56, "Ikke lås knærne") },
+    { label: "Bøyde knær", draw: (d) => d.floor(188) + d.ln([20, 178], [184, 178], 6, d.eq2) + d.rect(178, 58, 12, 122, d.eq2, 3) + d.ln([70, 157], [70, 178], 6, d.eq2) + d.ln([56, 150], [38, 88], 10, d.eq2) + d.ln([50, 153], [94, 153], 10, d.eq2) + d.ln([142, 121], [178, 121], 4, d.eq) + d.ln([138, 96], [138, 146], 8, d.eq) + d.torso([70, 140], [52, 92], d.body) + d.head([45, 72], d.body) + d.circ([72, 140], 11, d.hi) + d.leg([70, 140], [92, 100], [130, 124], [134, 111], d.hi) + d.arm([52, 92], [62, 118], [78, 138], d.body) + d.arrow([128, 164], [168, 164], d.hi) + d.tag(8, 40, "Ryggen mot støtten") },
+    { label: "Press frem", draw: (d) => d.floor(188) + d.ln([20, 178], [184, 178], 6, d.eq2) + d.rect(178, 58, 12, 122, d.eq2, 3) + d.ln([70, 157], [70, 178], 6, d.eq2) + d.ln([56, 150], [38, 88], 10, d.eq2) + d.ln([50, 153], [94, 153], 10, d.eq2) + d.ln([169, 121], [178, 121], 4, d.eq) + d.ln([165, 96], [165, 146], 8, d.eq) + d.torso([70, 140], [52, 92], d.body) + d.head([45, 72], d.body) + d.circ([72, 140], 11, d.hi) + d.leg([70, 140], [114, 127], [157, 129], [161, 116], d.hi) + d.arm([52, 92], [62, 118], [78, 138], d.body) + d.tag(70, 40, "Ikke lås knærne") },
   ],
   prim: ["quads", "glutes"], sec: ["hamstrings", "adductors", "calves"],
   steps: [
-    ["Sitt med ryggen og setet", "godt inn mot ryggstøtten."],
+    ["Still inn setet", "slik at knærne er bøyd ca. 90° når føttene står på platen."],
+    ["Sitt med ryggen og setet godt inntil ryggstøtten.", "Hold i håndtakene ved setet."],
     ["Sett føttene midt på platen,", "i hoftebreddes avstand og med tærne litt utover."],
-    ["Press platen opp og løsne sikringen.", "Hold i håndtakene ved setet."],
-    ["Bøy knærne og senk platen rolig", "til knærne er ca. 90°, eller så langt du klarer uten at korsryggen slipper setet. Knærne peker samme vei som tærne."],
-    ["Press opp med hele foten,", "særlig hælene, til nesten strake bein. Ikke lås knærne helt."],
+    ["Press platen fremover med hele foten,", "særlig hælene, til nesten strake bein. Ikke lås knærne helt."],
+    ["Bøy knærne og la platen komme rolig tilbake", "til ca. 90°, uten at vektene slår sammen. Knærne peker samme vei som tærne."],
   ],
   theory: { t: "Gå nær grensen", p: [
     "Musklene må utfordres for å bli sterkere. Velg en vekt der de siste repetisjonene er tunge: når du stopper, skal du ha 1–3 repetisjoner «igjen i tanken». Kunne du lett tatt 5 til, er vekten for lett. Men den siste repetisjonen skal fortsatt ha god teknikk.",
