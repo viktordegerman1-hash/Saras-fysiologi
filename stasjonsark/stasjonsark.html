@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="../src/fonts.css">
+<!-- START -->
+<title>Styrkestasjoner</title>
+<style>
+/* Utskriftsark i A4. Hvert ark måles i --mm (1/210 av arkbredden), så det skalerer på skjerm og blir nøyaktig A4 på papir.
+   Hver øvelse har sin egen farge: --c (sterk), --cs (lys), --ci (tekst på lys bakgrunn). */
+:root {
+  --ink: #2F2A3B;
+  --muted: #625C70;
+  --paper: #FFFFFF;
+  --desk: #E7E9EE;
+  --line: #DCDFE6;
+  --display: "Baloo 2", "Nunito", system-ui, sans-serif;
+  --body: "Nunito", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; background: var(--desk); color: var(--ink); font-family: var(--body); }
+
+/* ---------- Skjermvisning: meny og stabel av ark ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+  padding-block: 10px; padding-inline: 16px;
+}
+.top-in { max-width: 210mm; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.top h1 { font-family: var(--display); font-weight: 800; font-size: 20px; margin: 0 8px 0 0; line-height: 1; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 700 13px/1 var(--body); color: var(--ink); text-decoration: none;
+  padding: 7px 11px 7px 8px; border-radius: 99px; background: var(--desk);
+}
+.chip::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.chip:hover, .chip:focus-visible { background: var(--cs); outline: 2px solid var(--c); outline-offset: 0; }
+.intro { max-width: 210mm; margin: 18px auto 0; padding-inline: 16px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.intro b { color: var(--ink); }
+.stack { display: grid; gap: 28px; justify-items: center; padding-block: 18px 48px; padding-inline: 16px; }
+
+/* ---------- Arket ---------- */
+.sheet {
+  width: min(210mm, 100%);
+  aspect-ratio: 210 / 297;
+  background: var(--paper);
+  box-shadow: 0 1px 2px rgba(30,30,50,.08), 0 8px 30px rgba(30,30,50,.10);
+  container-type: inline-size;
+  overflow: hidden;
+  scroll-margin-top: 70px;
+}
+.in {
+  --mm: calc(100cqw / 210);
+  height: 100%;
+  display: flex; flex-direction: column;
+  font-size: calc(var(--mm) * 3.55);
+  line-height: 1.42;
+}
+.mm { font-size: calc(var(--mm) * 3.55); }
+
+/* Toppfelt */
+.head {
+  background: var(--c);
+  color: #fff;
+  padding: calc(var(--mm)*6.5) calc(var(--mm)*12) calc(var(--mm)*6);
+  position: relative; overflow: hidden;
+}
+.head .ring { position: absolute; border-radius: 50%; border: calc(var(--mm)*5) solid rgba(255,255,255,.16); }
+.head .eyebrow { font-family: var(--display); font-weight: 600; font-size: calc(var(--mm)*4); letter-spacing: .08em; text-transform: uppercase; opacity: .92; }
+.head h2 { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*14); line-height: .9; margin: calc(var(--mm)*1.5) 0 calc(var(--mm)*2); letter-spacing: -.01em; text-wrap: balance; position: relative; }
+.head p { margin: 0; font-size: calc(var(--mm)*4.1); font-weight: 600; max-width: calc(var(--mm)*175); position: relative; line-height: 1.3; }
+.head.dark-text { color: var(--ci); }
+.head.dark-text .ring { border-color: rgba(255,255,255,.35); }
+
+.body { flex: 1; padding: calc(var(--mm)*5) calc(var(--mm)*12) calc(var(--mm)*7); display: flex; flex-direction: column; gap: calc(var(--mm)*4.2); min-height: 0; }
+
+/* Illustrasjon */
+.illu { background: var(--cs); border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*3) calc(var(--mm)*6) calc(var(--mm)*4); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: calc(var(--mm)*2); }
+.pose { display: grid; justify-items: center; gap: calc(var(--mm)*1); }
+.pose svg { width: 100%; height: calc(var(--mm)*45); display: block; }
+.pose .lab { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*4.6); color: var(--ci); display: flex; align-items: center; gap: calc(var(--mm)*2); line-height: 1; }
+.pose .lab i { font-style: normal; width: calc(var(--mm)*6.6); height: calc(var(--mm)*6.6); border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font-size: calc(var(--mm)*4); padding-top: calc(var(--mm)*.5); }
+.dark-num .pose .lab i, .dark-num .steps li::before { color: var(--ci); }
+.illu .then { width: calc(var(--mm)*10); height: calc(var(--mm)*10); color: var(--c); }
+
+/* Midtre rad */
+.mid { display: grid; grid-template-columns: 1.25fr 1fr; align-items: start; gap: calc(var(--mm)*6); }
+h3 { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*6.4); line-height: 1; margin: 0 0 calc(var(--mm)*3); color: var(--ink); }
+h3 .dot { display: inline-block; width: .5em; height: .5em; border-radius: 50%; background: var(--c); margin-right: .3em; vertical-align: .08em; }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: calc(var(--mm)*2.2); font-size: calc(var(--mm)*3.45); }
+.steps li { counter-increment: s; display: grid; grid-template-columns: calc(var(--mm)*7) 1fr; gap: calc(var(--mm)*3); align-items: start; }
+.steps li::before { content: counter(s); width: calc(var(--mm)*7); height: calc(var(--mm)*7); border-radius: 50%; background: var(--c); color: #fff; font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*4.2); display: grid; place-items: center; padding-top: calc(var(--mm)*.5); }
+.steps b { font-weight: 800; }
+
+.muscles { border: calc(var(--mm)*.6) solid var(--line); border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*4.5) calc(var(--mm)*4); display: flex; flex-direction: column; }
+.muscles svg { width: 100%; height: calc(var(--mm)*50); display: block; }
+.legend { display: grid; gap: calc(var(--mm)*2); margin-top: calc(var(--mm)*2); }
+.legend .row { display: grid; grid-template-columns: calc(var(--mm)*5.5) 1fr; gap: calc(var(--mm)*2.2); align-items: start; }
+.legend .sw { width: calc(var(--mm)*5.5); height: calc(var(--mm)*5.5); border-radius: calc(var(--mm)*1.4); background: var(--c); margin-top: calc(var(--mm)*.3); }
+.legend .sw.sec { background: repeating-linear-gradient(45deg, var(--c) 0 calc(var(--mm)*.9), var(--cs) calc(var(--mm)*.9) calc(var(--mm)*1.8)); }
+.legend .k { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*4); line-height: 1.1; }
+.legend .v { font-size: calc(var(--mm)*3.3); line-height: 1.35; }
+.legend .v em { font-style: italic; color: var(--muted); }
+
+/* Nederste rad */
+.low { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--mm)*6); flex: 1; min-height: 0; }
+.midl { display: flex; flex-direction: column; gap: calc(var(--mm)*4.2); }
+.dose { background: var(--c); color: #fff; border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*5); display: grid; grid-template-columns: auto 1fr; gap: calc(var(--mm)*4); align-items: center; }
+.dose.dark-text { color: var(--ci); }
+.dose .big { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*12); line-height: .9; white-space: nowrap; padding-top: calc(var(--mm)*1); }
+.dose .big small { display: block; font-size: calc(var(--mm)*3.6); font-weight: 600; letter-spacing: .02em; margin-top: calc(var(--mm)*.5); }
+.dose p { margin: 0; font-size: calc(var(--mm)*3.4); line-height: 1.35; }
+.dose p + p { margin-top: calc(var(--mm)*1.3); }
+.theory { border: calc(var(--mm)*.8) solid var(--c); border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*5); flex: 1; }
+.eyebrow-s { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*3.3); letter-spacing: .1em; text-transform: uppercase; color: var(--ci); }
+.theory h4, .alt h4 { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*5.6); line-height: 1.05; margin: calc(var(--mm)*.6) 0 calc(var(--mm)*1.8); }
+.theory p, .alt p { margin: 0; font-size: calc(var(--mm)*3.45); line-height: 1.42; }
+.theory p + p, .alt p + p { margin-top: calc(var(--mm)*1.6); }
+.alt { background: var(--cs); border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*5); display: flex; flex-direction: column; }
+.alt svg { width: 100%; height: calc(var(--mm)*23); display: block; margin: calc(var(--mm)*.5) 0 calc(var(--mm)*2); background: var(--paper); border-radius: calc(var(--mm)*4); }
+.alt .fit { background: var(--paper); border-radius: calc(var(--mm)*3); padding: calc(var(--mm)*2) calc(var(--mm)*3); margin-top: auto; font-size: calc(var(--mm)*3.3); line-height: 1.35; }
+.alt .fit + .fit { margin-top: calc(var(--mm)*1.6); }
+.alt .fit b { color: var(--ci); }
+.altdose { font-family: var(--body); font-weight: 800; font-size: calc(var(--mm)*3.2); background: var(--paper); color: var(--ci); border-radius: 99px; padding: calc(var(--mm)*.6) calc(var(--mm)*2.4); white-space: nowrap; vertical-align: .2em; }
+.alt .gap { flex: 1; min-height: calc(var(--mm)*2); }
+
+/* ---------- Refleksjonsarket ---------- */
+.refl .head { background: var(--ink); }
+.stripes { display: flex; height: calc(var(--mm)*3); }
+.stripes span { flex: 1; }
+.refl .body { gap: calc(var(--mm)*4.5); }
+.qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--mm)*5) calc(var(--mm)*6); }
+.qblock { border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*5) calc(var(--mm)*4.5); background: var(--cs); }
+.qblock h3 { font-size: calc(var(--mm)*5.8); margin-bottom: calc(var(--mm)*2.6); color: var(--ci); }
+.qblock ol { margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--mm)*2.6); }
+.qblock li { display: grid; grid-template-columns: calc(var(--mm)*6) 1fr; gap: calc(var(--mm)*2.4); }
+.qblock li > i { font-style: normal; width: calc(var(--mm)*6); height: calc(var(--mm)*6); border-radius: 50%; background: var(--c); color: #fff; font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*3.5); display: grid; place-items: center; padding-top: calc(var(--mm)*.4); margin-top: calc(var(--mm)*.2); }
+.qblock .q { font-weight: 700; font-size: calc(var(--mm)*3.6); line-height: 1.35; }
+.qblock .h { font-size: calc(var(--mm)*3.15); color: var(--muted); line-height: 1.35; margin-top: calc(var(--mm)*.6); }
+.qblock .h b { color: var(--ci); font-weight: 800; }
+.tips { display: grid; grid-template-columns: 1.1fr 1fr; gap: calc(var(--mm)*6); }
+.tip { border: calc(var(--mm)*.6) solid var(--line); border-radius: calc(var(--mm)*6); padding: calc(var(--mm)*4) calc(var(--mm)*5); }
+.tip h4 { font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*5); margin: 0 0 calc(var(--mm)*1.5); line-height: 1.05; }
+.tip p, .tip li { font-size: calc(var(--mm)*3.35); line-height: 1.4; margin: 0; }
+.tip ul { margin: 0; padding-left: calc(var(--mm)*4.5); display: grid; gap: calc(var(--mm)*1); }
+.scale { display: flex; gap: calc(var(--mm)*2); margin-top: calc(var(--mm)*2.5); }
+.scale span { flex: 1; text-align: center; border-radius: calc(var(--mm)*2.5); padding: calc(var(--mm)*1.6) 0 calc(var(--mm)*1); font-family: var(--display); font-weight: 800; font-size: calc(var(--mm)*5.4); line-height: 1; color: #fff; }
+.scale span small { display: block; font-family: var(--body); font-weight: 700; font-size: calc(var(--mm)*2.5); margin-top: calc(var(--mm)*.6); line-height: 1.1; }
+
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* ---------- Utskrift ---------- */
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .top, .intro { display: none; }
+  .stack { display: block; padding: 0; }
+  .sheet { width: 210mm; height: 297mm; aspect-ratio: auto; box-shadow: none; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <nav class="top-in" id="nav" aria-label="Øvelser"><h1>Styrkestasjoner</h1></nav>
+</header>
+<p class="intro"><b>Åtte A4-ark til styrketimen:</b> ett informasjonsark per stasjon og ett ark med refleksjonsspørsmål til slutten av timen. Elevene jobber to og to: én løfter, én hviler og ser på teknikken.</p>
+<main class="stack" id="stack"></main>
+
+<script>
+/* ============ Farger og tegnehjelpere ============ */
+const NEUTRAL = { body: "#4A5163", far: "#B3B9C6", eq: "#2B303B", eq2: "#CDD3DC", plate: "#363C4A", hub: "#717A8C", floor: "#D9DDE4", band: "#6E7587" };
+
+function tint(hex, a) { // blander fargen med hvitt; a = andel farge
+  const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const m = (c) => Math.round(c * a + 255 * (1 - a)).toString(16).padStart(2, "0");
+  return "#" + m(r) + m(g) + m(b);
+}
+
+function pen(hi) {
+  const P = NEUTRAL, hi2 = tint(hi, .45);
+  const ln = (a, b, w, c) => `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+  const circ = (p, r, c) => `<circle cx="${p[0]}" cy="${p[1]}" r="${r}" fill="${c}"/>`;
+  const rect = (x, y, w, h, c, rx = 2) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${c}"/>`;
+  const d = {
+    hi, hi2, ...P, ln, circ, rect,
+    floor: (y) => ln([6, y], [194, y], 3, P.floor),
+    leg: (h, k, a, t, c) => ln(h, k, 15, c) + ln(k, a, 11, c) + ln(a, t, 7, c),
+    arm: (s, e, h, c) => ln(s, e, 10, c) + ln(e, h, 8, c) + circ(h, 5, c),
+    torso: (h, s, c) => ln(h, s, 24, c),
+    head: (p, c) => circ(p, 11, c),
+    plate: (p, r) => circ(p, r, P.plate) + circ(p, r * .42, P.hub) + circ(p, 3, P.eq2),
+    dbH: (p) => ln([p[0] - 8, p[1]], [p[0] + 8, p[1]], 4, P.eq) + rect(p[0] - 13, p[1] - 8, 5, 16, P.eq, 1.5) + rect(p[0] + 8, p[1] - 8, 5, 16, P.eq, 1.5),
+    dbV: (p) => ln([p[0], p[1] - 8], [p[0], p[1] + 8], 4, P.eq) + rect(p[0] - 8, p[1] - 13, 16, 5, P.eq, 1.5) + rect(p[0] - 8, p[1] + 8, 16, 5, P.eq, 1.5),
+    dbEnd: (p) => circ(p, 7.5, P.eq) + circ(p, 3, P.hub),
+    arrow(a, b, c, both) {
+      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+      const head = (p, s) => `<polygon points="${p[0]},${p[1]} ${p[0] - s * 9 * ux + 6 * nx},${p[1] - s * 9 * uy + 6 * ny} ${p[0] - s * 9 * ux - 6 * nx},${p[1] - s * 9 * uy - 6 * ny}" fill="${c}"/>`;
+      const a2 = both ? [a[0] + 6 * ux, a[1] + 6 * uy] : a, b2 = [b[0] - 6 * ux, b[1] - 6 * uy];
+      return ln(a2, b2, 4, c) + head(b, 1) + (both ? head(a, -1) : "");
+    },
+    tag(x, y, text) {
+      const w = text.length * 5.4 + 14;
+      return `<g><rect x="${x}" y="${y - 8}" width="${w}" height="16" rx="8" fill="#fff" stroke="${hi}" stroke-width="1.6"/><text x="${x + w / 2}" y="${y + 3.6}" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="10" fill="#2F2A3B">${text}</text></g>`;
+    },
+    // Figur forfra
+    ftorso: (cx, sy, wy, c) => `<path d="M${cx - 24},${sy} L${cx + 24},${sy} L${cx + 14},${wy} L${cx - 14},${wy} Z" fill="${c}" stroke="${c}" stroke-width="9" stroke-linejoin="round"/>`,
+    fhead: (cx, y, c) => ln([cx, y], [cx, y + 22], 10, c) + circ([cx, y], 12, c),
+    flegs(hy, ky, ay, c, kneel) {
+      let s = ln([91, hy], [89, ky], 15, c) + ln([109, hy], [111, ky], 15, c);
+      if (!kneel) s += ln([89, ky], [89, ay], 11, c) + ln([111, ky], [111, ay], 11, c) + `<ellipse cx="86" cy="${ay + 3}" rx="7" ry="3.5" fill="${c}"/><ellipse cx="114" cy="${ay + 3}" rx="7" ry="3.5" fill="${c}"/>`;
+      return s;
+    },
+  };
+  return d;
+}
+
+function poseSvg(color, pose) {
+  const d = pen(color);
+  return `<svg viewBox="${pose.vb || "0 0 200 200"}" role="img" aria-label="${pose.label}">${pose.draw(d)}</svg>`;
+}
+
+/* ============ Muskelkart (forfra og bakfra) ============ */
+const MAP = {
+  front: {
+    mid: `<ellipse cx="50" cy="14" rx="9" ry="11" class="n"/><rect x="45" y="22" width="10" height="11" rx="3" class="n"/>`,
+    side: [
+      ["delts_f", `<ellipse cx="32" cy="40" rx="7.5" ry="8"/>`],
+      ["pecs", `<path d="M49.4,34 L38,35 Q33,40 35,49 Q41,56 49.4,53 Z"/>`],
+      ["biceps", `<ellipse cx="27.5" cy="58" rx="4.6" ry="10" transform="rotate(8 27.5 58)"/>`],
+      ["forearms", `<ellipse cx="23.5" cy="81" rx="4" ry="12" transform="rotate(10 23.5 81)"/>`],
+      ["", `<circle cx="20.5" cy="96" r="3.6"/>`],
+      ["abs", `<path d="M43.6,56 L49.4,56 L49.4,90 Q46,92 43.6,89 Z"/>`],
+      ["obliques", `<path d="M42,56 L36.5,53 Q34,70 37,86 L42,90 Z"/>`],
+      ["quads", `<path d="M36,93 Q31,116 35,141 L44,142 Q45,120 45,100 Z"/>`],
+      ["adductors", `<path d="M45.6,97 L49.4,100 Q49.6,114 45,134 Q46,118 45.6,97 Z"/>`],
+      ["", `<circle cx="40" cy="146" r="4"/>`],
+      ["", `<ellipse cx="39.5" cy="166" rx="4.6" ry="15"/>`],
+      ["", `<ellipse cx="39" cy="185" rx="5" ry="3"/>`],
+    ],
+    deco: `<g stroke="#fff" stroke-width="1.2"><line x1="43.6" y1="66" x2="56.4" y2="66"/><line x1="43.6" y1="77" x2="56.4" y2="77"/></g>`,
+  },
+  back: {
+    mid: `<ellipse cx="50" cy="14" rx="9" ry="11" class="n"/><rect x="45" y="22" width="10" height="9" rx="3" class="n"/>`,
+    side: [
+      ["lats", `<path d="M37,44 Q34,58 40,73 L49.4,80 L49.4,60 L44,46 Z"/>`],
+      ["traps", `<path d="M49.4,23 L45,28 Q40,32 35,35 L43,40 L49.4,58 Z"/>`],
+      ["delts_b", `<ellipse cx="32" cy="40" rx="7.5" ry="8"/>`],
+      ["triceps", `<ellipse cx="27.5" cy="58" rx="4.6" ry="10" transform="rotate(8 27.5 58)"/>`],
+      ["forearms", `<ellipse cx="23.5" cy="81" rx="4" ry="12" transform="rotate(10 23.5 81)"/>`],
+      ["", `<circle cx="20.5" cy="96" r="3.6"/>`],
+      ["lowerback", `<path d="M49.4,81 L43,77 Q42,86 43,94 L49.4,96 Z"/>`],
+      ["glutes", `<ellipse cx="42.5" cy="104" rx="7.8" ry="9"/>`],
+      ["hamstrings", `<path d="M35,113 Q32,128 36,143 L45,143 Q48,127 48,113 Z"/>`],
+      ["", `<circle cx="40" cy="147" r="3.5"/>`],
+      ["calves", `<ellipse cx="39.5" cy="163" rx="5.5" ry="13"/>`],
+      ["", `<ellipse cx="39.5" cy="178" rx="3" ry="6"/>`],
+      ["", `<ellipse cx="39" cy="186" rx="4.5" ry="3"/>`],
+    ],
+    deco: "",
+  },
+};
+
+function muscleSvg(id, color, prim, sec) {
+  const soft = tint(color, .28);
+  const fill = (k) => prim.includes(k) ? color : sec.includes(k) ? `url(#h-${id})` : "#DDE1E8";
+  const view = (v) => {
+    const parts = MAP[v].side.map(([k, el]) => el.replace(/^<(\w+)/, `<$1 fill="${fill(k)}"`)).join("");
+    return `<g stroke="#fff" stroke-width="1.1">${MAP[v].mid.replaceAll('class="n"', 'fill="#DDE1E8"')}${parts}<g transform="translate(100 0) scale(-1 1)">${parts}</g></g>${MAP[v].deco}`;
+  };
+  return `<svg viewBox="0 0 215 206" role="img" aria-label="Muskelkart forfra og bakfra">
+    <defs><pattern id="h-${id}" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="${soft}"/><rect width="2" height="4" fill="${color}"/></pattern></defs>
+    <g transform="translate(2 0)">${view("front")}</g>
+    <g transform="translate(113 0)">${view("back")}</g>
+    <text x="52" y="203" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="11" fill="#625C70">Forfra</text>
+    <text x="163" y="203" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="11" fill="#625C70">Bakfra</text>
+  </svg>`;
+}
+
+/* ============ Øvelsene ============ */
+const M = {
+  glutes: ["Setemusklene", "gluteus maximus"],
+  hamstrings: ["Baksiden av låret", "hamstrings"],
+  lowerback: ["Ryggstrekkerne", "erector spinae"],
+  quads: ["Forsiden av låret", "quadriceps"],
+  traps: ["Kappemuskelen", "trapezius"],
+  forearms: ["Underarmene", "grepet"],
+  abs: ["Mage og kjerne", "core"],
+  obliques: ["Skrå magemuskler", "obliques"],
+  pecs: ["Den store brystmuskelen", "pectoralis major"],
+  triceps: ["Triceps", "baksiden av overarmen"],
+  delts_f: ["Fremre skuldermuskel", "fremre deltoid"],
+  delts_b: ["Bakre skuldermuskel", "bakre deltoid"],
+  lats: ["Den brede ryggmuskelen", "latissimus dorsi"],
+  biceps: ["Biceps", "forsiden av overarmen"],
+  adductors: ["Innsiden av låret", "adduktorer"],
+  calves: ["Leggen", "gastrocnemius"],
+};
+
+const EX = [
+{
+  id: "markloft", name: "Markløft", color: "#E5484D", soft: "#FDE7E7", ink: "#B4232A",
+  sub: "Løft stangen fra gulvet med rett rygg. En av de beste øvelsene for hele baksiden av kroppen.",
+  reps: "6–8",
+  poses: [
+    { label: "Start", draw: (d) => d.floor(188) + d.plate([100, 163], 24) + d.leg([60, 128], [106, 142], [94, 180], [108, 185], d.hi) + d.torso([60, 128], [102, 105], d.hi) + d.head([120, 95], d.body) + d.arm([102, 105], [101, 134], [100, 160], d.body) + d.arrow([156, 168], [156, 112], d.hi) + d.tag(22, 74, "Rett rygg") },
+    { label: "Stå helt oppreist", draw: (d) => d.floor(188) + d.plate([98, 98], 24) + d.leg([94, 92], [96, 136], [94, 180], [108, 185], d.hi) + d.torso([94, 92], [97, 40], d.hi) + d.head([99, 19], d.body) + d.arm([97, 40], [97, 69], [98, 96], d.body) + d.arrow([156, 112], [156, 168], d.hi2) + d.tag(124, 54, "Stram sete") },
+  ],
+  prim: ["glutes", "hamstrings", "lowerback"], sec: ["quads", "traps", "forearms", "abs"],
+  steps: [
+    ["Føttene i hoftebreddes avstand,", "stangen over midten av foten."],
+    ["Bøy i hofter og knær og grip stangen", "rett utenfor knærne. Leggene er nesten inntil stangen."],
+    ["Rett ryggen:", "brystet frem og skuldrene rett over stangen. Pust inn og stram magen."],
+    ["Press gulvet bort med beina.", "Stangen glir tett langs leggene og lårene."],
+    ["Stå helt oppreist og klem setet.", "Senk samme vei ned: hoftene bakover først, så knærne."],
+  ],
+  theory: { t: "Teknikk før kilo", p: [
+    "Det er bedre å løfte 40 kg med god teknikk enn 60 kg med dårlig. Med god teknikk er det de riktige musklene som gjør jobben, og belastningen fordeles trygt. Øk vekten først når teknikken sitter i alle repetisjonene. Da kan du trene i mange år uten skader.",
+  ]},
+  alt: { name: "Hoftehev", vb: "0 62 200 86",
+    draw: (d) => d.floor(140) + d.arm([42, 128], [70, 133], [95, 135], d.body) + d.torso([100, 104], [42, 128], d.body) + d.leg([100, 104], [138, 96], [140, 128], [152, 135], d.hi) + d.circ([100, 106], 11, d.hi) + d.head([22, 128], d.body) + d.arrow([176, 132], [176, 92], d.hi),
+    text: "Ligg på ryggen med bøyde knær. Press hoftene opp til kroppen er rett, klem setet og senk rolig.",
+    fit: "du har vondt i korsryggen. Gir mindre belastning på ryggen.",
+    reps: "3 sett × 8–10" },
+},
+{
+  id: "benkpress", name: "Benkpress", color: "#F2711C", soft: "#FFEBDD", ink: "#B24B07",
+  sub: "Press stangen opp fra brystet. Bygger styrke i brystet, skuldrene og armene.",
+  reps: "6–10", partner: "Partneren står ved hodeenden og sikrer. Hjelp til hvis stangen stopper.",
+  poses: [
+    { label: "Strake armer", draw: (d) => d.floor(188) + d.rect(28, 138, 124, 9, d.eq2, 3) + d.rect(40, 147, 6, 41, d.eq2) + d.rect(134, 147, 6, 41, d.eq2) + d.plate([62, 70], 20) + d.leg([128, 126], [166, 134], [172, 178], [184, 184], d.body) + d.torso([128, 126], [58, 125], d.hi) + d.head([36, 121], d.body) + d.arm([58, 125], [60, 97], [62, 70], d.hi) + d.arrow([98, 66], [98, 108], d.hi) + d.tag(92, 40, "Over skuldrene") },
+    { label: "Stangen mot brystet", draw: (d) => d.floor(188) + d.rect(28, 138, 124, 9, d.eq2, 3) + d.rect(40, 147, 6, 41, d.eq2) + d.rect(134, 147, 6, 41, d.eq2) + d.plate([68, 100], 20) + d.leg([128, 126], [166, 134], [172, 178], [184, 184], d.body) + d.torso([128, 126], [58, 125], d.hi) + d.head([36, 121], d.body) + d.arm([58, 125], [52, 148], [68, 110], d.hi) + d.arrow([108, 108], [108, 66], d.hi) + d.tag(28, 58, "Rolig ned, press opp") },
+  ],
+  prim: ["pecs", "triceps"], sec: ["delts_f"],
+  steps: [
+    ["Ligg på benken med øynene rett under stangen.", "Føttene står godt i gulvet."],
+    ["Grip stangen litt bredere enn skuldrene.", "Klem skulderbladene sammen og ned mot baklommene."],
+    ["Løft stangen ut", "og hold den rett over skuldrene med strake armer."],
+    ["Senk stangen rolig til nedre del av brystet.", "Albuene peker skrått ut (ca. 45°), ikke rett ut til siden."],
+    ["Press stangen opp til strake armer.", "Hodet, skuldrene og setet ligger mot benken hele tiden."],
+  ],
+  theory: { t: "Hvorfor 6–10 repetisjoner?", p: [
+    "Når du bare klarer 6–10 repetisjoner, må musklene jobbe med nesten all kraften de har. Det gir kroppen beskjed om å bli sterkere: først blir nervesystemet flinkere til å bruke musklene, så blir muskelfibrene større. Mange lette repetisjoner trener mest utholdenhet.",
+  ]},
+  alt: { name: "Armhevinger", vb: "0 70 200 78",
+    draw: (d) => d.floor(140) + d.leg([110, 110], [145, 120], [176, 130], [184, 137], d.body) + d.torso([110, 110], [54, 96], d.hi) + d.head([36, 90], d.body) + d.arm([54, 96], [53, 116], [52, 133], d.hi) + d.arrow([14, 98], [14, 132], d.hi, true),
+    text: "Hendene litt bredere enn skuldrene, kroppen rett som en planke. Senk brystet mot gulvet og press opp.",
+    fit: "ingen kan sikre deg, eller stangen gir vondt i skulderen. Lettere: knærne i gulvet.",
+    reps: "3 sett × 6–10" },
+},
+{
+  id: "nedtrekk", name: "Nedtrekk", color: "#E0A100", soft: "#FFF3CC", ink: "#7A5500", darkText: true,
+  sub: "Trekk stangen ned mot brystet. Trener ryggen og er et godt steg på veien mot pull-ups.",
+  reps: "8–10",
+  poses: [
+    { label: "Strake armer", draw: (d) => d.floor(188) + d.rect(66, 0, 68, 6, d.eq2, 2) + d.ln([100, 0], [100, 28], 2.5, d.eq) + d.rect(72, 128, 56, 10, d.eq2, 3) + d.ln([100, 138], [100, 188], 6, d.eq2) + d.flegs(132, 150, 180, d.body) + d.rect(70, 141, 60, 9, d.eq, 4) + d.ftorso(100, 84, 132, d.hi) + d.fhead(100, 58, d.body) + d.ln([36, 28], [164, 28], 5, d.eq) + d.arm([77, 84], [60, 56], [52, 28], d.hi2) + d.arm([123, 84], [140, 56], [148, 28], d.hi2) + d.arrow([184, 40], [184, 90], d.hi) },
+    { label: "Stangen til brystet", draw: (d) => d.floor(188) + d.rect(66, 0, 68, 6, d.eq2, 2) + d.ln([100, 0], [100, 52], 2.5, d.eq) + d.rect(72, 128, 56, 10, d.eq2, 3) + d.ln([100, 138], [100, 188], 6, d.eq2) + d.flegs(132, 150, 180, d.body) + d.rect(70, 141, 60, 9, d.eq, 4) + d.ftorso(100, 84, 132, d.hi) + d.fhead(100, 58, d.body) + d.ln([42, 82], [158, 82], 5, d.eq) + d.arm([77, 84], [62, 112], [56, 82], d.hi2) + d.arm([123, 84], [138, 112], [144, 82], d.hi2) + d.tag(118, 20, "Albuene ned") },
+  ],
+  prim: ["lats", "biceps"], sec: ["traps", "delts_b", "forearms"],
+  steps: [
+    ["Still inn lårputen", "så lårene sitter godt fast. Føttene står i gulvet."],
+    ["Grip stangen bredere enn skuldrene,", "med håndflatene vendt fremover."],
+    ["Len overkroppen litt bakover", "og hold brystet frem og opp."],
+    ["Trekk stangen ned til øvre del av brystet.", "Tenk: albuene ned mot sidene. Trekk alltid foran hodet, aldri bak nakken."],
+    ["Slipp stangen rolig opp", "til strake armer, uten at vektene slår sammen."],
+  ],
+  theory: { t: "Hvorfor hvile mellom settene?", p: [
+    "Når du løfter tungt, bruker musklene et lite og raskt energilager (kreatinfosfat). Det tar 1–3 minutter å fylle det opp igjen. Hviler du for kort, klarer du færre repetisjoner i neste sett. Derfor bytter dere: mens partneren løfter, hviler du.",
+  ]},
+  alt: { name: "Nedtrekk med strikk", vb: "0 0 200 150",
+    draw: (d) => d.floor(146) + d.rect(86, 0, 28, 7, d.eq, 2) + d.flegs(110, 138, 0, d.body, true) + d.ftorso(100, 60, 110, d.hi) + d.fhead(100, 36, d.body) + d.ln([100, 6], [58, 62], 3, d.band) + d.ln([100, 6], [142, 62], 3, d.band) + d.arm([77, 60], [62, 88], [58, 62], d.hi2) + d.arm([123, 60], [138, 88], [142, 62], d.hi2) + d.arrow([26, 40], [26, 86], d.hi) + d.arrow([174, 40], [174, 86], d.hi),
+    text: "Fest strikken høyt i ribbeveggen. Stå på knærne og trekk strikken ned mot brystet med albuene inn mot sidene.",
+    fit: "maskinen er opptatt, skuldrene er vonde, eller den letteste vekten er for tung.",
+    reps: "3 sett × 8–10" },
+},
+{
+  id: "beinpress", name: "Beinpress", color: "#2E9E62", soft: "#E1F4E8", ink: "#1C6E42",
+  sub: "Press platen bort med beina. En trygg måte å trene beina tungt på.",
+  reps: "8–10",
+  poses: [
+    { label: "Bøyde knær", draw: (d) => d.floor(188) + d.ln([110, 168], [192, 90], 6, d.eq2) + d.ln([60, 160], [60, 188], 6, d.eq2) + d.ln([92, 168], [104, 188], 6, d.eq2) + d.ln([22, 131], [90, 172], 9, d.eq2) + d.ln([130, 103], [150, 128], 4, d.eq) + d.ln([119, 91], [141, 115], 7, d.eq) + d.torso([80, 150], [36, 122], d.body) + d.head([19, 111], d.body) + d.circ([82, 150], 11, d.hi) + d.leg([80, 150], [79, 105], [124, 109], [117, 100], d.hi) + d.arm([36, 122], [52, 142], [70, 152], d.body) + d.arrow([150, 172], [184, 138], d.hi) + d.tag(8, 56, "Ryggen inntil setet") },
+    { label: "Press ut", draw: (d) => d.floor(188) + d.ln([110, 168], [192, 90], 6, d.eq2) + d.ln([60, 160], [60, 188], 6, d.eq2) + d.ln([92, 168], [104, 188], 6, d.eq2) + d.ln([22, 131], [90, 172], 9, d.eq2) + d.ln([150, 84], [170, 108], 4, d.eq) + d.ln([139, 72], [161, 96], 7, d.eq) + d.torso([80, 150], [36, 122], d.body) + d.head([19, 111], d.body) + d.circ([82, 150], 11, d.hi) + d.leg([80, 150], [106, 114], [144, 90], [137, 82], d.hi) + d.arm([36, 122], [52, 142], [70, 152], d.body) + d.tag(8, 56, "Ikke lås knærne") },
+  ],
+  prim: ["quads", "glutes"], sec: ["hamstrings", "adductors", "calves"],
+  steps: [
+    ["Sitt med ryggen og setet", "godt inn mot ryggstøtten."],
+    ["Sett føttene midt på platen,", "i hoftebreddes avstand og med tærne litt utover."],
+    ["Press platen opp og løsne sikringen.", "Hold i håndtakene ved setet."],
+    ["Bøy knærne og senk platen rolig", "til knærne er ca. 90°, eller så langt du klarer uten at korsryggen slipper setet. Knærne peker samme vei som tærne."],
+    ["Press opp med hele foten,", "særlig hælene, til nesten strake bein. Ikke lås knærne helt."],
+  ],
+  theory: { t: "Gå nær grensen", p: [
+    "Musklene må utfordres for å bli sterkere. Velg en vekt der de siste repetisjonene er tunge: når du stopper, skal du ha 1–3 repetisjoner «igjen i tanken». Kunne du lett tatt 5 til, er vekten for lett. Men den siste repetisjonen skal fortsatt ha god teknikk.",
+  ]},
+  alt: { name: "Goblet-knebøy", vb: "0 14 200 132",
+    draw: (d) => d.floor(140) + d.torso([80, 104], [94, 56], d.body) + d.head([98, 35], d.body) + d.circ([80, 104], 11, d.hi) + d.leg([80, 104], [122, 100], [100, 132], [113, 137], d.hi) + d.arm([94, 56], [104, 82], [110, 68], d.body) + d.dbV([112, 68]) + d.arrow([162, 130], [162, 80], d.hi),
+    text: "Hold en manual inntil brystet. Sett deg ned mellom hælene med rett rygg, og press deg opp igjen.",
+    fit: "beinpressen er opptatt. Lettere: sett deg ned på en benk og reis deg opp.",
+    reps: "3 sett × 8–10" },
+},
+{
+  id: "skulderpress", name: "Skulderpress", color: "#0E95A3", soft: "#DDF3F5", ink: "#076570",
+  sub: "Press manualene over hodet. Gir sterke og stabile skuldre.",
+  reps: "8–10",
+  poses: [
+    { label: "Skulderhøyde", draw: (d) => d.floor(188) + d.flegs(116, 152, 181, d.body) + d.ftorso(100, 64, 116, d.body) + d.fhead(100, 40, d.body) + d.circ([78, 66], 9, d.hi) + d.circ([122, 66], 9, d.hi) + d.arm([77, 64], [58, 84], [58, 56], d.hi) + d.arm([123, 64], [142, 84], [142, 56], d.hi) + d.dbH([58, 56]) + d.dbH([142, 56]) + d.arrow([24, 86], [24, 34], d.hi) + d.arrow([176, 86], [176, 34], d.hi) },
+    { label: "Strake armer", draw: (d) => d.floor(188) + d.flegs(116, 152, 181, d.body) + d.ftorso(100, 64, 116, d.body) + d.fhead(100, 40, d.body) + d.circ([78, 66], 9, d.hi) + d.circ([122, 66], 9, d.hi) + d.arm([77, 64], [70, 36], [74, 12], d.hi) + d.arm([123, 64], [130, 36], [126, 12], d.hi) + d.dbH([74, 12]) + d.dbH([126, 12]) + d.tag(130, 100, "Stram mage") },
+  ],
+  prim: ["delts_f", "triceps"], sec: ["traps", "delts_b", "abs"],
+  labels: { delts_f: ["Skuldermuskelen", "deltoid, mest fremre del"] },
+  steps: [
+    ["Stå med føttene i hoftebreddes avstand.", "Stram magen og setet. Du kan også sitte på en benk med ryggstøtte."],
+    ["Hold manualene i skulderhøyde,", "med håndflatene vendt fremover og albuene litt foran kroppen."],
+    ["Press manualene rett opp", "til armene er strake over hodet."],
+    ["Senk rolig", "tilbake til skulderhøyde."],
+    ["Hold ribbeina «nede»:", "ikke svai i korsryggen når du presser opp."],
+  ],
+  theory: { t: "Hvorfor 3 sett?", p: [
+    "Ett sett gir musklene et signal om å bli sterkere, og flere sett gjør signalet tydeligere. Det første settet er også oppvarming for nervesystemet, så ofte jobber musklene best i sett 2 og 3. Med 3 sett på 7 stasjoner trener du hele kroppen effektivt.",
+  ]},
+  alt: { name: "Sidehev med lette manualer", vb: "0 18 200 175",
+    draw: (d) => d.floor(188) + d.flegs(116, 152, 181, d.body) + d.ftorso(100, 64, 116, d.body) + d.fhead(100, 40, d.body) + d.circ([78, 66], 9, d.hi) + d.circ([122, 66], 9, d.hi) + d.arm([77, 64], [50, 68], [24, 74], d.body) + d.arm([123, 64], [150, 68], [176, 74], d.body) + d.dbEnd([24, 74]) + d.dbEnd([176, 74]) + d.arrow([34, 124], [24, 92], d.hi) + d.arrow([166, 124], [176, 92], d.hi),
+    text: "Løft lette manualer ut til siden til skulderhøyde, med albuene litt bøyd. Senk rolig.",
+    fit: "det gjør vondt å presse over hodet.",
+    reps: "3 sett × 8–10" },
+},
+{
+  id: "utfall", name: "Utfall", color: "#3E63DD", soft: "#E4EAFC", ink: "#2240A8",
+  sub: "Langt steg frem og ned. Trener ett bein om gangen og gir bedre balanse.",
+  reps: "8–10", repsNote: "per bein",
+  poses: [
+    { label: "Start", draw: (d) => d.floor(188) + d.leg([100, 92], [101, 136], [100, 180], [112, 185], d.hi) + d.torso([100, 92], [100, 40], d.body) + d.head([101, 19], d.body) + d.arm([100, 40], [100, 68], [101, 95], d.body) + d.arrow([122, 166], [168, 166], d.hi) + d.tag(112, 146, "Langt steg frem") },
+    { label: "Ned og opp igjen", draw: (d) => d.floor(188) + d.leg([92, 134], [76, 178], [36, 166], [46, 184], d.hi2) + d.leg([92, 134], [136, 134], [138, 180], [150, 185], d.hi) + d.torso([92, 134], [92, 82], d.body) + d.head([93, 61], d.body) + d.arm([92, 82], [92, 110], [93, 137], d.body) + d.arrow([176, 96], [176, 150], d.hi, true) + d.tag(108, 40, "Overkroppen rett") },
+  ],
+  prim: ["quads", "glutes"], sec: ["hamstrings", "adductors", "calves", "abs"],
+  steps: [
+    ["Stå oppreist med føttene i hoftebreddes avstand.", "Hold gjerne en manual i hver hånd."],
+    ["Ta et langt steg frem", "med ett bein."],
+    ["Senk det bakre kneet rett ned mot gulvet", "til begge knærne er bøyd ca. 90°."],
+    ["Fremre kne er over foten", "og peker samme vei som tærne. Overkroppen er oppreist og blikket rett frem."],
+    ["Press fra med fremre fot", "og gå tilbake til start. Ta alle repetisjonene, og bytt bein."],
+  ],
+  theory: { t: "Slik blir du sterkere over tid", p: [
+    "Musklene tilpasser seg det de blir utsatt for. Klarer du 10 gode repetisjoner i alle tre settene, kan du øke litt neste gang, for eksempel 1–2 kg. Klarer du færre enn 6, går du ned i vekt. Små, jevne økninger kalles progresjon.",
+  ]},
+  alt: { name: "Step-up på benk", vb: "0 0 200 196",
+    draw: (d) => d.floor(188) + d.rect(112, 140, 70, 48, d.eq2, 4) + d.leg([100, 90], [96, 135], [88, 178], [100, 185], d.hi2) + d.torso([100, 90], [110, 40], d.body) + d.head([114, 19], d.body) + d.leg([100, 90], [140, 94], [132, 133], [144, 136], d.hi) + d.arm([110, 40], [108, 68], [106, 94], d.body) + d.arrow([192, 124], [192, 66], d.hi),
+    text: "Sett hele foten på en stødig benk. Press deg opp med det fremre beinet til du står oppreist, og gå rolig ned.",
+    fit: "du får vondt i knærne i dype utfall, eller har dårlig balanse.",
+    reps: "3 sett × 8–10 per bein" },
+},
+{
+  id: "roing", name: "Roing med manual", color: "#8B4FC4", soft: "#F0E6FA", ink: "#62319A",
+  sub: "Trekk manualen opp mot hoften. Trener ryggen og gir god holdning.",
+  reps: "8–10", repsNote: "per arm",
+  poses: [
+    { label: "Strak arm", draw: (d) => d.floor(188) + d.rect(18, 140, 104, 9, d.eq2, 3) + d.rect(28, 149, 6, 39, d.eq2) + d.rect(106, 149, 6, 39, d.eq2) + d.leg([112, 112], [92, 133], [124, 134], [132, 134], d.far) + d.arm([56, 104], [53, 120], [50, 133], d.far) + d.torso([112, 112], [56, 104], d.hi) + d.head([37, 100], d.body) + d.leg([112, 112], [128, 148], [126, 182], [114, 186], d.body) + d.arm([56, 104], [57, 133], [58, 160], d.hi) + d.dbH([58, 160]) + d.arrow([84, 170], [84, 126], d.hi) + d.tag(12, 64, "Rett rygg") },
+    { label: "Trekk mot hoften", draw: (d) => d.floor(188) + d.rect(18, 140, 104, 9, d.eq2, 3) + d.rect(28, 149, 6, 39, d.eq2) + d.rect(106, 149, 6, 39, d.eq2) + d.leg([112, 112], [92, 133], [124, 134], [132, 134], d.far) + d.arm([56, 104], [53, 120], [50, 133], d.far) + d.torso([112, 112], [56, 104], d.hi) + d.head([37, 100], d.body) + d.leg([112, 112], [128, 148], [126, 182], [114, 186], d.body) + d.arm([56, 104], [84, 96], [82, 124], d.hi) + d.dbH([82, 124]) + d.tag(96, 64, "Albuen bakover") },
+  ],
+  prim: ["lats", "traps"], sec: ["delts_b", "biceps", "forearms"],
+  labels: { traps: ["Midtre del av ryggen", "trapezius og rhomboideus"] },
+  steps: [
+    ["Sett kneet og hånden på samme side på en benk.", "Den andre foten står i gulvet, litt ut til siden."],
+    ["Ryggen er rett og nesten vannrett.", "Blikket ned mot gulvet."],
+    ["Hold manualen med strak arm", "rett under skulderen."],
+    ["Trekk manualen opp mot hoften.", "Albuen går tett langs kroppen og bakover. Skuldrene holdes parallelle med gulvet, uten å vri overkroppen."],
+    ["Klem skulderbladet inn mot ryggraden på toppen,", "og senk rolig til strak arm. Ta alle repetisjonene, og bytt arm."],
+  ],
+  theory: { t: "Kontroll i senkefasen", p: [
+    "Musklene jobber også når vekten går ned: de bremser den, og her er de faktisk sterkest. Senk rolig på ca. 2 sekunder og løft bestemt opp. Da får musklene mer arbeid, du styrer bevegelsen bedre, og risikoen for skade blir mindre.",
+  ]},
+  alt: { name: "Roing med strikk", vb: "0 6 200 188",
+    draw: (d) => d.floor(188) + d.rect(4, 20, 8, 168, d.eq2, 2) + d.leg([114, 94], [108, 136], [112, 180], [100, 185], d.body) + d.torso([114, 94], [110, 42], d.hi) + d.head([106, 21], d.body) + d.ln([14, 92], [106, 70], 3, d.band) + d.circ([14, 92], 4, d.eq) + d.arm([110, 42], [134, 64], [106, 70], d.hi) + d.arrow([50, 126], [92, 126], d.hi),
+    text: "Fest strikken i brysthøyde. Trekk albuene bakover langs kroppen og klem skulderbladene sammen.",
+    fit: "du får vondt i korsryggen når du står foroverbøyd.",
+    reps: "3 sett × 8–10" },
+},
+];
+
+/* ============ Bygg arkene ============ */
+const ARROW = `<svg class="then" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h13M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ringHtml = `<span class="ring" style="width:calc(var(--mm)*80);height:calc(var(--mm)*80);right:calc(var(--mm)*-22);top:calc(var(--mm)*-30)"></span><span class="ring" style="width:calc(var(--mm)*34);height:calc(var(--mm)*34);right:calc(var(--mm)*48);bottom:calc(var(--mm)*-20)"></span>`;
+
+function legendRow(cls, title, keys, labels) {
+  const names = keys.map((k) => { const [n, l] = (labels && labels[k]) || M[k]; return `${n} <em>(${l})</em>`; });
+  return `<div class="row"><span class="sw ${cls}"></span><div><div class="k">${title}</div><div class="v">${names.join(", ")}</div></div></div>`;
+}
+
+function sheet(e) {
+  const vars = `--c:${e.color};--cs:${e.soft};--ci:${e.ink}`;
+  const dt = e.darkText ? " dark-text" : "";
+  const poses = e.poses.map((p, i) => `<div class="pose">${poseSvg(e.color, p)}<div class="lab"><i>${i + 1}</i>${p.label}</div></div>`).join(ARROW);
+  return `<section class="sheet${e.darkText ? " dark-num" : ""}" id="${e.id}" style="${vars}" aria-label="${e.name}"><div class="in">
+    <div class="head${dt}">${ringHtml}<div class="eyebrow">Styrkestasjon</div><h2>${e.name}</h2><p>${e.sub}</p></div>
+    <div class="body">
+      <div class="illu">${poses}</div>
+      <div class="mid">
+        <div class="midl"><div><h3><span class="dot"></span>Slik gjør du det</h3><ol class="steps">${e.steps.map(([b, t]) => `<li><span><b>${b}</b> ${t}</span></li>`).join("")}</ol></div>
+          <div class="dose${dt}"><div class="big">3 × ${e.reps}<small>sett × repetisjoner${e.repsNote ? " " + e.repsNote : ""}</small></div>
+            <div><p><b>Hvile:</b> mens partneren din tar sitt sett. Bytt etter hvert sett.</p><p>${e.partner || "<b>Partneren:</b> følg med på teknikken og si fra hvis noe kan bli bedre."}</p></div></div></div>
+        <div class="muscles"><h3><span class="dot"></span>Muskler som jobber</h3>${muscleSvg(e.id, e.color, e.prim, e.sec)}
+          <div class="legend">${legendRow("", "Jobber mest", e.prim, e.labels)}${legendRow("sec", "Hjelper til", e.sec, e.labels)}</div></div>
+      </div>
+      <div class="low">
+        <div class="theory"><div class="eyebrow-s">Treningslære</div><h4>${e.theory.t}</h4>${e.theory.p.map((x) => `<p>${x}</p>`).join("")}</div>
+        <div class="alt"><div class="eyebrow-s">Alternativ øvelse</div><h4>${e.alt.name} <span class="altdose">${e.alt.reps}</span></h4>
+          ${poseSvg(e.color, { label: e.alt.name, vb: e.alt.vb, draw: e.alt.draw })}
+          <p>${e.alt.text}</p><div class="gap"></div>
+          <div class="fit"><b>Passer hvis</b> ${e.alt.fit}</div></div>
+      </div>
+    </div>
+  </div></section>`;
+}
+
+/* ============ Refleksjonsarket ============ */
+const Q = [
+  { t: "Teknikk og kropp", c: "#E5484D", s: "#FDE7E7", i: "#B4232A", q: [
+    ["Hvilken øvelse var vanskeligst å gjøre med god teknikk? Hva var det som var vanskelig?", ""],
+    ["Velg én øvelse: hvor i kroppen kjente du at det jobbet? Stemte det med muskelkartet på arket?", ""],
+    ["Hvilke øvelser trener mange av de samme musklene?", "<b>Stikkord:</b> nedtrekk og roing (ryggen), beinpress og utfall (forsiden av låret og setet), benkpress og skulderpress (triceps)."],
+    ["Hvilke øvelser er «skyv», og hvilke er «trekk»? Hvorfor er det lurt å trene begge deler?", "<b>Stikkord:</b> skyv: benkpress, skulderpress, beinpress. Trekk: nedtrekk, roing. Balanse rundt skuldrene og god holdning."],
+  ]},
+  { t: "Belastning og treningslære", c: "#3E63DD", s: "#E4EAFC", i: "#2240A8", q: [
+    ["Hvordan visste du om vekten var passe tung? Hadde du 1–3 repetisjoner igjen i tanken?", ""],
+    ["Hvorfor tror du vi valgte 6–10 repetisjoner i dag, og ikke 30?", "<b>Stikkord:</b> tung belastning bygger styrke, mange lette repetisjoner trener mest utholdenhet."],
+    ["Hvorfor er det viktig å hvile mellom settene? Hva skjer i musklene mens du hviler?", "<b>Stikkord:</b> kreatinfosfat fylles opp igjen på 1–3 minutter."],
+    ["Hva må du gjøre for å bli sterkere i en øvelse over tid?", "<b>Stikkord:</b> progresjon. Øk litt når du klarer 10 gode repetisjoner i alle settene."],
+    ["Kjente du forskjell når du senket vekten rolig?", "<b>Stikkord:</b> musklene jobber også i senkefasen, og bremsingen gir mer kontroll."],
+  ]},
+  { t: "Samarbeid", c: "#2E9E62", s: "#E1F4E8", i: "#1C6E42", q: [
+    ["Hvilket teknikktips ga du til partneren din, eller fikk du selv?", ""],
+    ["Brukte du en alternativ øvelse? Hvorfor, og hvordan fungerte den?", ""],
+  ]},
+  { t: "Veien videre", c: "#8B4FC4", s: "#F0E6FA", i: "#62319A", q: [
+    ["Hvilken øvelse vil du bli bedre på, og hva er ditt neste steg?", ""],
+    ["Hvordan kan styrketrening hjelpe deg i hverdagen eller i en annen idrett du driver med?", ""],
+  ]},
+];
+
+function reflSheet() {
+  const colors = EX.map((e) => `<span style="background:${e.color}"></span>`).join("");
+  let n = 0;
+  const block = (g) => `<div class="qblock" style="--c:${g.c};--cs:${g.s};--ci:${g.i}"><h3>${g.t}</h3><ol>${g.q.map(([q, h]) => `<li><i>${++n}</i><div><div class="q">${q}</div>${h ? `<div class="h">${h}</div>` : ""}</div></li>`).join("")}</ol></div>`;
+  const scale = ["#E5484D", "#F2711C", "#E0A100", "#7DB843", "#2E9E62"].map((c, i) => `<span style="background:${c}">${i + 1}<small>${["Usikker", "", "Litt sikker", "", "Helt sikker"][i]}</small></span>`).join("");
+  return `<section class="sheet refl" id="refleksjon" style="--c:#2F2A3B;--cs:#EEEDF2;--ci:#2F2A3B" aria-label="Refleksjon etter økta"><div class="in">
+    <div class="head">${ringHtml}<div class="eyebrow">Til læreren · avslutning av timen</div><h2>Refleksjon etter økta</h2><p>Velg 4–6 spørsmål. La elevene snakke to og to i 1–2 minutter før dere tar svarene felles.</p></div>
+    <div class="stripes">${colors}</div>
+    <div class="body">
+      <div class="qgrid">
+        <div style="display:grid;gap:calc(var(--mm)*5);align-content:start">${block(Q[0])}${block(Q[2])}</div>
+        <div style="display:grid;gap:calc(var(--mm)*5);align-content:start">${block(Q[1])}${block(Q[3])}</div>
+      </div>
+      <div class="tips">
+        <div class="tip"><h4>Exit-lapp på 1 minutt</h4><p>Elevene viser med fingrene, eller skriver på en lapp: <b>Hvor sikker er du på teknikken i markløft?</b> Bytt gjerne ut øvelsen fra time til time.</p><div class="scale">${scale}</div></div>
+        <div class="tip"><h4>Slik kan du bruke arket</h4><ul><li>Spør i par, ta svar i plenum.</li><li>Be elevene vise bevegelsen mens de forklarer.</li><li>Ta med muskelkartet: «Pek på musklene som jobbet.»</li><li>Bruk svarene til å velge fokus neste time.</li></ul></div>
+      </div>
+    </div>
+  </div></section>`;
+}
+
+/* ============ Sett inn i siden ============ */
+document.getElementById("stack").innerHTML = EX.map(sheet).join("") + reflSheet();
+document.getElementById("nav").insertAdjacentHTML("beforeend",
+  EX.map((e) => `<a class="chip" href="#${e.id}" style="--c:${e.color};--cs:${e.soft}">${e.name}</a>`).join("") +
+  `<a class="chip" href="#refleksjon" style="--c:#2F2A3B;--cs:#EEEDF2">Refleksjon</a>`);
+</script>
+<!-- END -->
+</body>
+</html>
